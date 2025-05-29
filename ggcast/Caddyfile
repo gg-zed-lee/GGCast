@@ -1,0 +1,22 @@
+# ggcast/Caddyfile
+{
+  admin off
+  auto_https off
+}
+
+:80 {
+  # Serve the frontend (React/Vite app)
+  handle_path /* {
+    reverse_proxy frontend:3000 # Assuming frontend runs on port 3000
+  }
+
+  # API requests
+  handle_path /api/* {
+    reverse_proxy backend:8000 # Assuming backend runs on port 8000
+  }
+
+  # WebSocket connections
+  handle_path /ws* {
+    reverse_proxy backend:8000 # Assuming backend runs on port 8000
+  }
+}

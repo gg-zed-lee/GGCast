@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    # ports: # Only for direct access if needed, Caddy handles main routing
+    #   - "8001:8000" # Exposing on 8001 to avoid conflict if something runs on 8000 locally
+    volumes:
+      - ./backend:/app
+      - ./shared:/app/shared # Mount shared directory into backend
+    environment:
+      PYTHONUNBUFFERED: 1
+      PYTHONPATH: "/app:/app/shared" # Ensure shared can be imported
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    # ports: # Only for direct access if needed, Caddy handles main routing
+    #  - "5174:5173" # Exposing on 5174 to avoid conflict
+    volumes:
+      - ./frontend:/app
+      # Volume for node_modules to persist them inside container and not overwrite from host
+      # For Vite, node_modules are usually in frontend/node_modules.
+      # The path /app/node_modules implies that WORKDIR is /app in the frontend Dockerfile.
+      - /app/node_modules # This path must match WORKDIR in Dockerfile.dev
+    environment:
+      NODE_ENV: development
+      VITE_DEV_SERVER_HOST: "0.0.0.0"
+      CHOKIDAR_USEPOLLING: "true"
+
+  proxy:
+    image: caddy:2.7-alpine
+    restart: unless-stopped
+    ports:
+      - "3000:3000" # Main entry point for user
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile # Assumes Caddyfile is in the root ggcast/ directory
+      # - ./shared:/shared # Unlikely needed for Caddy to access shared files directly
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  caddy_data:
+  caddy_config:

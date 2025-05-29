@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = "GGCast Backend"
+authors = ["google-labs-jules[bot] <161369871+google-labs-jules[bot]@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{ include = "app" }]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+fastapi = ">=0.115.12,<0.116.0"
+uvicorn = {extras = ["standard"], version = ">=0.34.2,<0.35.0"}
+
+[tool.poetry.scripts]
+dev = "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+black = "^25.1.0"
+ruff = "^0.11.11"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "/app"
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py310'] # Matching project's Python
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "T20", "SIM", "PTH", "Q"]
+ignore = ["E501"] # Black handles line length
+
+[tool.ruff.lint]
+# Add specific lint rule configurations if needed
+# select = ["ALL"] # for example, then ignore specifics
+
+[tool.ruff.format]
+# Options for ruff's formatter, if used instead of or with Black
+# We are using ruff format alongside black in pre-commit, ensure compatibility or choose one.
+# For now, let's assume Black is primary Python formatter, and ruff for linting + its own formatting.
+# If ruff-format is used in pre-commit, its config here would be relevant.
+# Default behavior for ruff-format is to be compatible with Black.
+docstring-code-format = true
+# quote-style = "double" # Example option
+# indent-style = "space" # Example
+# skip-magic-trailing-comma = false # Example
+# line-ending = "auto" # Example

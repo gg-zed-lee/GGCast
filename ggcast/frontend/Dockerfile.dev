@@ -1,0 +1,18 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package.json and lock file (e.g. package-lock.json)
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+# For dev, this will be overlaid by the volume mount
+COPY . .
+
+EXPOSE 5173
+
+# Start the dev server, ensuring it listens on all interfaces to be accessible from outside the container
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

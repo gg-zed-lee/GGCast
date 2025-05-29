@@ -1,0 +1,40 @@
+# ggcast/.pre-commit-config.yaml
+repos:
+# Python formatting and linting
+-   repo: https://github.com/psf/black
+    rev: 23.11.0 # Or a newer stable version
+    hooks:
+    -   id: black
+        args: [--config=backend/pyproject.toml] # Point to backend's pyproject.toml for Black config
+        files: ^backend/|^shared/ # Apply only to backend and shared Python files
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6 # Or a newer stable version
+    hooks:
+    -   id: ruff
+        args: [--config=backend/pyproject.toml, --fix] # Added --fix for auto-correction
+        files: ^backend/|^shared/
+    -   id: ruff-format # if you want ruff to also format
+        args: [--config=backend/pyproject.toml]
+        files: ^backend/|^shared/
+# Frontend formatting and linting
+-   repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.55.0 # Or a newer stable version of ESLint itself
+    hooks:
+    -   id: eslint
+        files: ^frontend/.*\.[tj]sx?$ # Target .ts, .tsx, .js, .jsx files in frontend
+        args: [--fix]
+        additional_dependencies:
+        - eslint@8.55.0
+        - typescript@5.2.2 # Match Vite's TS version or project's TS
+        - "@typescript-eslint/parser@6.12.0"
+        - "@typescript-eslint/eslint-plugin@6.12.0"
+        - "eslint-plugin-react@7.33.2"
+        - "eslint-plugin-react-hooks@4.6.0"
+        # Add other ESLint plugins/configs used in frontend/package.json
+-   repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0 # Or a newer stable version of Prettier
+    hooks:
+    -   id: prettier
+        files: ^frontend/.*\.(ts|tsx|js|jsx|css|md|json)$ # Target relevant frontend files
+        args: [--config=frontend/.prettierrc.json, --ignore-path=frontend/.prettierignore, --write] # Added --write for auto-correction
+        # Optional: point to specific configs, ensure .prettierrc.json and .prettierignore exist or remove args if using defaults.

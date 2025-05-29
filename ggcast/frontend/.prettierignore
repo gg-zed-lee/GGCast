@@ -1,0 +1,12 @@
+dist
+node_modules
+coverage
+# Add other files/directories to ignore if needed
+# For example, if you have large data files or specific build outputs
+# that Prettier shouldn't touch.
+# vite.config.ts might be formatted by Prettier or ESLint, depending on setup.
+# If ESLint handles its formatting, you might add it here.
+# However, the pre-commit config for Prettier targets .ts so it would normally include it.
+# For now, keeping it minimal.
+.DS_Store
+*.log
