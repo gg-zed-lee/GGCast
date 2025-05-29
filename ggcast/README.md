@@ -8,7 +8,7 @@ To get the development environment up and running:
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repository-url> ggcast
+    git clone <https://github.com/gg-zed-lee/GGCast> ggcast
     cd ggcast
     ```
     *(Replace `<your-repository-url>` with the actual URL of this repository once it's on GitHub).*
